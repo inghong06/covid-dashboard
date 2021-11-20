@@ -22,4 +22,5 @@ This app works well as it is now. But it's too plain and more can be improved. H
 - Adding "active cases" and "critical cases"
 - Improving the chart
 - Add a table to display data from countries
+- Add searchbar to dropdown country list to optimize country selection
 

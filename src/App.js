@@ -9,6 +9,17 @@ const App = () => {
   const [globalData, setGlobalData] = useState([]);
   const [allCountriesData, setAllCountriesData] = useState([]);
   const [countryName, setCountryName] = useState("World");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleChange = (e) => {
+    setSearchTerm(e);
+    console.log(e);
+  };
+
+  const handleClick = (e) => {
+    setCountryName(e);
+    setSearchTerm("");
+  };
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -40,6 +51,10 @@ const App = () => {
   const filteredData = allData.filter(({ country }) =>
     country.includes(countryName)
   );
+  const filteredCountry = allData.filter(({ country }) =>
+    country.toLowerCase().includes(searchTerm)
+  );
+
   const dateObject = new Date(filteredData[0].updated);
   const updatedDate =
     dateObject.toLocaleDateString("en-GB") +
@@ -76,16 +91,40 @@ const App = () => {
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <div className="">
+            <div>
               <Menu.Items className=" overflow-y-auto max-h-60 absolute left-0 mt-2 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-y-auto">
-                {allData.map(({ country, countryInfo: { flag } }) => (
+                <div className="flex border border-black bg-white rounded-tl-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-8 h-auto py-1 ml-2 overflow-hidden"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                  <input
+                    type="search"
+                    onChange={(e) => handleChange(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Search Country"
+                    className="text-xl py-1 container rounded-tl-lg text-left px-3 m1-1"
+                  />
+                </div>
+
+                {filteredCountry.map(({ country, countryInfo: { flag } }) => (
                   <Menu.Item key={country}>
                     {({ active }) => (
                       <div
                         className={`${
                           active && "bg-blue-500"
                         } text-xl text-black hover:text-white py-1 cursor-pointer bg-white flex items-center`}
-                        onClick={(e) => setCountryName(country)}
+                        onClick={(e) => handleClick(country)}
                       >
                         <div className="w-8 h-auto py-1 ml-2">
                           <img src={country != "World" ? flag : worldFlag} />
@@ -107,14 +146,14 @@ const App = () => {
           Updated: {updatedDate}
         </span>
         <span className="text-center">
-          Source:{" "}
+          Source:&nbsp;
           <a
-            href="https://disease.sh/docs/?urls.primaryName=version%203.0.0"
+            href="https://github.com/disease-sh/API"
             rel="noreferrer"
             target="_blank"
             className="hover:text-blue-500"
           >
-            NovelCoVID19 API 
+            NovelCoVID19 API
           </a>
           &nbsp;by&nbsp;
           <a
@@ -129,17 +168,25 @@ const App = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="col-span-1 lg:col-span-4">
+        <div className="col-span-1 lg:col-span-6">
           <Cards covidData={filteredData} type="total" />
         </div>
-        <div className="col-span-1 lg:col-span-4">
+        <div className="col-span-1 lg:col-span-6">
           <Cards covidData={filteredData} type="deaths" />
         </div>
-        <div className="col-span-1 lg:col-span-4">
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="col-span-1 lg:col-span-6">
           <Cards covidData={filteredData} type="recovered" />
         </div>
+        <div className="col-span-1 lg:col-span-6 col-stretch">
+          <Cards covidData={filteredData} type="active" />
+        </div>
       </div>
-      <DataChart countryName={countryName} />
+      <DataChart countryName={countryName} type="caseTotal"/>
+      <DataChart countryName={countryName} type="caseDaily"/>
+      <DataChart countryName={countryName} type="deathTotal"/>
+      <DataChart countryName={countryName} type="deathDaily"/>
     </div>
   );
 };

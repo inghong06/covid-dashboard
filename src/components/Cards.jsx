@@ -50,6 +50,17 @@ const Cards = ({ covidData, type }) => {
       </div>
     );
   }
+
+  if (type == "active") {
+    return (
+      <div className="flex flex-col justify-center border items-center shadow-lg border-b mt-8">
+        <span className="text-2xl font-bold py-1">Total Active</span>
+        <span className="text-xl font-medium">
+          {active.toLocaleString()}
+        </span>
+      </div>
+    );
+  }
 };
 
 export default Cards;

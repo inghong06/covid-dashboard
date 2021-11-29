@@ -168,21 +168,25 @@ const App = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="col-span-1 lg:col-span-6">
+        <div className="col-span-1 lg:col-span-4">
           <Cards covidData={filteredData} type="total" />
         </div>
-        <div className="col-span-1 lg:col-span-6">
+        <div className="col-span-1 lg:col-span-4">
           <Cards covidData={filteredData} type="deaths" />
         </div>
+        <div className="col-span-1 lg:col-span-4">
+          <Cards covidData={filteredData} type="recovered" />
+        </div>
+
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="col-span-1 lg:col-span-6">
           <Cards covidData={filteredData} type="recovered" />
         </div>
         <div className="col-span-1 lg:col-span-6 col-stretch">
           <Cards covidData={filteredData} type="active" />
         </div>
-      </div>
+      </div> */}
       <DataChart countryName={countryName} type="caseTotal"/>
       <DataChart countryName={countryName} type="caseDaily"/>
       <DataChart countryName={countryName} type="deathTotal"/>
